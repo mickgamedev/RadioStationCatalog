@@ -2,7 +2,7 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewModel" type="ru.yandex.dunaev.mick.radiostationcatalog.MainViewModel"/>
+        <variable name="viewModel" type="ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.MainViewModel"/>
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

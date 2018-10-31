@@ -1,4 +1,4 @@
-package ru.yandex.dunaev.mick.radiostationcatalog
+package ru.yandex.dunaev.mick.radiostationcatalog.model
 
 import android.content.Context
 import android.util.Log
@@ -17,10 +17,15 @@ fun syncDb(){
 
 class SyncDatabaseWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
-        val list: List<StationModel>?
         try {
-            list = RadioBrowserApi.create().getStationList().execute().body()
-            addStationsToCatalog(list!!)
+            val list = RadioBrowserApi.create().getStationList().execute().body()!!
+            list.forEach { it.sync = true }
+            with(CatalogDatabase) {
+                clearStationsSync()
+                addStationsToCatalog(list)
+                deleteUnsync()
+                saveSyncResult()
+            }
         } catch (err: Exception) {
             Log.e(TAG,err.message)
             return Result.FAILURE
