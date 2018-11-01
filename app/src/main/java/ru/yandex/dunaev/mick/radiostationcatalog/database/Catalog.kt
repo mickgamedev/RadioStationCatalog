@@ -9,9 +9,9 @@ import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
 @Database(entities = arrayOf(StationModel::class,
     SyncResult::class,
-    Countries::class,
-    Languages::class,
-    Tags::class), version = 1, exportSchema = false)
+    Country::class,
+    Language::class,
+    Tag::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class CatalogDatabase : RoomDatabase(){
     abstract fun stationModelDao(): StationModelDao
@@ -39,7 +39,7 @@ fun CatalogDatabase.Companion.getAllStations() = getInstance().stationModelDao()
 fun CatalogDatabase.Companion.clearStationsSync() { oldSize = getInstance().stationModelDao().clearSync() }
 fun CatalogDatabase.Companion.deleteUnsync() { delete = getInstance().stationModelDao().deleteUnsync() }
 fun CatalogDatabase.Companion.clearAdditionalTables() = getInstance().additionalTables().clearAllTables()
-fun CatalogDatabase.Companion.addAdditionalTables(countries: List<Countries>, languages: List<Languages>, tags: List<Tags>)
+fun CatalogDatabase.Companion.addAdditionalTables(countries: List<Country>, languages: List<Language>, tags: List<Tag>)
         = getInstance().additionalTables().addTables(countries, languages, tags)
 fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().getSyncResult().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 

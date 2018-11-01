@@ -11,13 +11,13 @@ interface RadioBrowserApi {
     fun getStationList(): Call<List<StationModel>>
 
     @POST("json/countries")
-    fun getCountiesList(): Call<List<Countries>>
+    fun getCountiesList(): Call<List<Country>>
 
     @POST("json/languages")
-    fun getLanguagesList(): Call<List<Languages>>
+    fun getLanguagesList(): Call<List<Language>>
 
     @POST("json/tags")
-    fun getTagsList(): Call<List<Tags>>
+    fun getTagsList(): Call<List<Tag>>
 
     companion object Factory{
         private val radioBrowserApi = Retrofit

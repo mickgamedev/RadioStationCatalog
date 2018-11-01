@@ -1,6 +1,7 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
 
 @Entity(tableName = "stations")
@@ -39,10 +40,10 @@ open class BaseEntity{
 }
 
 @Entity(tableName = "countries")
-class  Countries: BaseEntity()
+class  Country: BaseEntity()
 
 @Entity(tableName = "languages")
-class  Languages: BaseEntity()
+class  Language: BaseEntity()
 
 @Entity(tableName = "tags")
-class  Tags: BaseEntity()
+class  Tag: BaseEntity()

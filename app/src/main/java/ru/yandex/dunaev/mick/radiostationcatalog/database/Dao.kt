@@ -1,6 +1,5 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.Observable
 import ru.yandex.dunaev.mick.radiostationcatalog.model.*
@@ -32,19 +31,19 @@ interface SyncResultDao{
 @Dao
 interface AdditionalTablesDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAllCountries(list: List<Countries>)
+    fun addAllCountries(list: List<Country>)
 
     @Query("DELETE FROM countries")
     fun deleteAllCountries()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAllLanguages(list: List<Languages>)
+    fun addAllLanguages(list: List<Language>)
 
     @Query("DELETE FROM languages")
     fun deleteAllLanguages()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAllTags(list: List<Tags>)
+    fun addAllTags(list: List<Tag>)
 
     @Query("DELETE FROM tags")
     fun deleteAllTags()
@@ -57,7 +56,7 @@ interface AdditionalTablesDao{
     }
 
     @Transaction
-    fun addTables(countries: List<Countries>, languages: List<Languages>, tags: List<Tags>){
+    fun addTables(countries: List<Country>, languages: List<Language>, tags: List<Tag>){
         addAllCountries(countries)
         addAllLanguages(languages)
         addAllTags(tags)

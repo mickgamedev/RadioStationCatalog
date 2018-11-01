@@ -40,9 +40,9 @@ class CatalogPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getCount(): Int = 3
 
     override fun getPageTitle(position: Int): CharSequence? = when(position){
-        0 -> "Countries"
-        1 -> "Languages"
-        2 -> "Tags"
+        0 -> "Country"
+        1 -> "Language"
+        2 -> "Tag"
         else -> TODO("not implemented")
     }
 }
