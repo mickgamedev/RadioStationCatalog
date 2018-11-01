@@ -2,6 +2,8 @@ package ru.yandex.dunaev.mick.radiostationcatalog.database
 
 import android.content.Context
 import androidx.room.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDateTime
 import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
@@ -39,7 +41,7 @@ fun CatalogDatabase.Companion.deleteUnsync() { delete = getInstance().stationMod
 fun CatalogDatabase.Companion.clearAdditionalTables() = getInstance().additionalTables().clearAllTables()
 fun CatalogDatabase.Companion.addAdditionalTables(countries: List<Countries>, languages: List<Languages>, tags: List<Tags>)
         = getInstance().additionalTables().addTables(countries, languages, tags)
-fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().getSyncResult()
+fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().getSyncResult().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
 fun CatalogDatabase.Companion.saveSyncResult() {
     val update = oldSize - delete

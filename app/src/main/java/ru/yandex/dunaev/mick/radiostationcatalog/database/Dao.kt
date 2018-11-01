@@ -2,6 +2,7 @@ package ru.yandex.dunaev.mick.radiostationcatalog.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import io.reactivex.Observable
 import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
 @Dao
@@ -25,7 +26,7 @@ interface SyncResultDao{
     fun saveResult(result: SyncResult)
 
     @Query("SELECT * FROM sync_result WHERE id=1 LIMIT 1")
-    fun getSyncResult(): LiveData<List<SyncResult>>
+    fun getSyncResult(): Observable<List<SyncResult>>
 }
 
 @Dao
