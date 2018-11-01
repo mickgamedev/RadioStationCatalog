@@ -1,22 +1,18 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.MainViewModel
 import ru.yandex.dunaev.mick.radiostationcatalog.R
 import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.CountriesListFragment
 import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.LanguagesListFragment
 import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.TagsListFragment
-import ru.yandex.dunaev.mick.radiostationcatalog.database.CatalogDatabase
-import ru.yandex.dunaev.mick.radiostationcatalog.database.getSyncResult
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.ActivityMainBinding
+import ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
