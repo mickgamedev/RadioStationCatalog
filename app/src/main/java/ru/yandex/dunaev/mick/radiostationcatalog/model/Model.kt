@@ -5,27 +5,44 @@ import org.threeten.bp.LocalDateTime
 
 @Entity(tableName = "stations")
 data class StationModel(
-    @PrimaryKey var id: Int,
-    var changeuuid:String,
-    var stationuuid:String,
-    var name:String,
-    var url:String,
-    var favicon:String,
-    var tags:String,
-    var country:String,
-    var language:String,
-    var votes:String,
-    var negativevotes:String,
-    var ip:String,
-    var codec:String,
-    var bitrate:String,
-    var sync:Boolean)
+    @PrimaryKey val id: Int,
+    val changeuuid:String,
+    val stationuuid:String,
+    val name:String,
+    val url:String,
+    val favicon:String,
+    val tags:String,
+    val country:String,
+    val language:String,
+    val votes:String,
+    val negativevotes:String,
+    val ip:String,
+    val codec:String,
+    val bitrate:String,
+    val unsync:Boolean)
 
 @Entity(tableName = "sync_result")
 data class SyncResult(
     @PrimaryKey
-    var id: Int,
-    var date: LocalDateTime,
-    var insert: Int,
-    var update: Int,
-    var delete: Int)
+    val id: Int,
+    val date: LocalDateTime,
+    val insert: Int,
+    val update: Int,
+    val delete: Int)
+
+open class BaseEntity{
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+    var name = ""
+    var value = ""
+    var stationcount = 0
+}
+
+@Entity(tableName = "countries")
+class  Countries: BaseEntity()
+
+@Entity(tableName = "languages")
+class  Languages: BaseEntity()
+
+@Entity(tableName = "tags")
+class  Tags: BaseEntity()

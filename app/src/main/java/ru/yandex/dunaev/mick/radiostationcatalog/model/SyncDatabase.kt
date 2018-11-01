@@ -19,12 +19,17 @@ fun syncDb(){
 class SyncDatabaseWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
     override fun doWork(): Result {
         try {
-            val list = RadioBrowserApi.create().getStationList().execute().body()!!
-            list.forEach { it.sync = true }
+            val list = RadioBrowserApi.getApi().getStationList().execute().body()!!
+            val countries = RadioBrowserApi.getApi().getCountiesList().execute().body()!!
+            val languages = RadioBrowserApi.getApi().getLanguagesList().execute().body()!!
+            val tags = RadioBrowserApi.getApi().getTagsList().execute().body()!!
+
             with(CatalogDatabase) {
+                clearAdditionalTables()
                 clearStationsSync()
                 addStationsToCatalog(list)
                 deleteUnsync()
+                addAdditionalTables(countries, languages, tags)
                 saveSyncResult()
             }
         } catch (err: Exception) {

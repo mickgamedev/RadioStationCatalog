@@ -3,14 +3,18 @@ package ru.yandex.dunaev.mick.radiostationcatalog.database
 import android.content.Context
 import androidx.room.*
 import org.threeten.bp.LocalDateTime
-import ru.yandex.dunaev.mick.radiostationcatalog.model.StationModel
-import ru.yandex.dunaev.mick.radiostationcatalog.model.SyncResult
+import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
-@Database(entities = arrayOf(StationModel::class, SyncResult::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(StationModel::class,
+    SyncResult::class,
+    Countries::class,
+    Languages::class,
+    Tags::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class CatalogDatabase : RoomDatabase(){
     abstract fun stationModelDao(): StationModelDao
     abstract fun syncResultDao(): SyncResultDao
+    abstract fun additionalTables(): AdditionalTablesDao
 
     companion object {
         var oldSize = 0
@@ -32,12 +36,17 @@ fun CatalogDatabase.Companion.addStationsToCatalog(list: List<StationModel>) {
 fun CatalogDatabase.Companion.getAllStations() = getInstance().stationModelDao().getAllStations()
 fun CatalogDatabase.Companion.clearStationsSync() { oldSize = getInstance().stationModelDao().clearSync() }
 fun CatalogDatabase.Companion.deleteUnsync() { delete = getInstance().stationModelDao().deleteUnsync() }
+fun CatalogDatabase.Companion.clearAdditionalTables() = getInstance().additionalTables().clearAllTables()
+fun CatalogDatabase.Companion.addAdditionalTables(countries: List<Countries>, languages: List<Languages>, tags: List<Tags>)
+        = getInstance().additionalTables().addTables(countries, languages, tags)
+fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().getSyncResult()
 
 fun CatalogDatabase.Companion.saveSyncResult() {
     val update = oldSize - delete
     val insert = newSize - update
     getInstance().syncResultDao().saveResult(SyncResult(1,LocalDateTime.now(),insert,update,delete))
 }
+
 
 class Converters {
     @TypeConverter

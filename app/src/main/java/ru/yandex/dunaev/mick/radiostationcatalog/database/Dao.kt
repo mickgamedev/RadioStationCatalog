@@ -1,11 +1,8 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import ru.yandex.dunaev.mick.radiostationcatalog.model.StationModel
-import ru.yandex.dunaev.mick.radiostationcatalog.model.SyncResult
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
 @Dao
 interface StationModelDao{
@@ -15,10 +12,10 @@ interface StationModelDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addStations(stations: List<StationModel>)
 
-    @Query("UPDATE stations SET sync=0")
+    @Query("UPDATE stations SET unsync=1")
     fun clearSync(): Int
 
-    @Query("DELETE FROM stations WHERE sync=0")
+    @Query("DELETE FROM stations WHERE unsync=1")
     fun deleteUnsync(): Int
 }
 
@@ -27,6 +24,41 @@ interface SyncResultDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveResult(result: SyncResult)
 
-    @Query("SELECT * FROM sync_result WHERE id=1")
-    fun getSyncResult(): List<SyncResult>
+    @Query("SELECT * FROM sync_result WHERE id=1 LIMIT 1")
+    fun getSyncResult(): LiveData<List<SyncResult>>
+}
+
+@Dao
+interface AdditionalTablesDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAllCountries(list: List<Countries>)
+
+    @Query("DELETE FROM countries")
+    fun deleteAllCountries()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAllLanguages(list: List<Languages>)
+
+    @Query("DELETE FROM languages")
+    fun deleteAllLanguages()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addAllTags(list: List<Tags>)
+
+    @Query("DELETE FROM tags")
+    fun deleteAllTags()
+
+    @Transaction
+    fun clearAllTables(){
+        deleteAllCountries()
+        deleteAllLanguages()
+        deleteAllTags()
+    }
+
+    @Transaction
+    fun addTables(countries: List<Countries>, languages: List<Languages>, tags: List<Tags>){
+        addAllCountries(countries)
+        addAllLanguages(languages)
+        addAllTags(tags)
+    }
 }

@@ -10,12 +10,22 @@ interface RadioBrowserApi {
     @POST("json/stations")
     fun getStationList(): Call<List<StationModel>>
 
+    @POST("json/countries")
+    fun getCountiesList(): Call<List<Countries>>
+
+    @POST("json/languages")
+    fun getLanguagesList(): Call<List<Languages>>
+
+    @POST("json/tags")
+    fun getTagsList(): Call<List<Tags>>
+
     companion object Factory{
-        fun create(): RadioBrowserApi = Retrofit
+        private val radioBrowserApi = Retrofit
             .Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("http://www.radio-browser.info/webservice/")
             .build()
             .create(RadioBrowserApi::class.java)
+        fun getApi(): RadioBrowserApi = radioBrowserApi
     }
 }
