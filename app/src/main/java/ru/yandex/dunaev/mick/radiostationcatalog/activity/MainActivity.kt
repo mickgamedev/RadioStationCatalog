@@ -1,5 +1,6 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
     fun showStationsWithFilter(filter: String){
         Log.v("MainActivity","show stations with filter: $filter")
+        val intent = Intent(this, StationListActivity::class.java).apply {
+            putExtra(EXTRA_FILTR,filter)
+        }
+        startActivity(intent)
     }
 }
 

@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="viewModel" type="ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.MainViewModel"/>
+        <variable name="viewModel" type="ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.StationListViewModel"/>
+        <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,20 +20,16 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
                     android:id="@+id/toolbar"/>
-            <com.google.android.material.tabs.TabLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tabs"/>
-
         </com.google.android.material.appbar.AppBarLayout>
-        <androidx.viewpager.widget.ViewPager
+        <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:id="@+id/pager"
-                app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_manager="@{layoutManager}"
+                app:adapter="@{viewModel.stationsAdapter}"
+
+        />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

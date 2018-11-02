@@ -9,19 +9,19 @@ import ru.yandex.dunaev.mick.radiostationcatalog.adapters.TagAdapter
 import ru.yandex.dunaev.mick.radiostationcatalog.database.*
 import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
-val TAG = "MainViewModel"
+val TAG_MVM = "MainViewModel"
 
 class MainViewModel: ViewModel() {
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val disp = CatalogDatabase.getSyncResult().subscribe{v -> onSyncComplete(v[0])}
+    val disp = CatalogDatabase.getSyncResult().subscribe( {v -> onSyncComplete(v[0])},{err -> Log.e(TAG_MVM,err.message)},{})
 
     val countriesAdapter = CountryAdapter()
     val languagesAdapter = LanguageAdapter()
     val tagsAdapter = TagAdapter()
 
-    var onShowStationWithFilter: (String) -> Unit = {v -> Log.v(TAG, "show stations not binding filter:$v")}
+    var onShowStationWithFilter: (String) -> Unit = {v -> Log.v(TAG_MVM, "show stations not binding filter:$v")}
 
     init {
         countriesAdapter.onItemClick = { v -> onCountryClicked(v)}
@@ -32,7 +32,7 @@ class MainViewModel: ViewModel() {
     fun syncNow() = syncDb()
 
     fun onSyncComplete(sync: SyncResult){
-        Log.w(TAG, "${sync.date} insert:${sync.insert} update:${sync.update} delete:${sync.delete}")
+        Log.w(TAG_MVM, "${sync.date} insert:${sync.insert} update:${sync.update} delete:${sync.delete}")
         uiScope.launch{
             var countries: List<Country>? = null
             var languages: List<Language>? = null
@@ -60,7 +60,7 @@ class MainViewModel: ViewModel() {
 
     fun onTagClicked(position: Int){
         val filter = tagsAdapter.getItem(position).value
-        onShowStationWithFilter("tag='$filter'")
+        onShowStationWithFilter("tags='$filter'")
     }
 
     override fun onCleared() {

@@ -9,14 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.yandex.dunaev.mick.radiostationcatalog.R
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.CountryCardBinding
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.LanguageCardBinding
+import ru.yandex.dunaev.mick.radiostationcatalog.databinding.StationCardBinding
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.TagCardBinding
-import ru.yandex.dunaev.mick.radiostationcatalog.model.BaseEntity
 import ru.yandex.dunaev.mick.radiostationcatalog.model.Country
 import ru.yandex.dunaev.mick.radiostationcatalog.model.Language
+import ru.yandex.dunaev.mick.radiostationcatalog.model.StationModel
 import ru.yandex.dunaev.mick.radiostationcatalog.model.Tag
 
 class CountryAdapter : CategoryAdapter<Country, CountryCardBinding>(R.layout.country_card) {
-    override fun onBindViewHolder(holder: CategoryHolder<Country, CountryCardBinding>, position: Int) = with(holder.binding){
+    override fun onBindViewHolder(holder: CategoryHolder<CountryCardBinding>, position: Int) = with(holder.binding){
         holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
@@ -24,7 +25,7 @@ class CountryAdapter : CategoryAdapter<Country, CountryCardBinding>(R.layout.cou
 }
 
 class LanguageAdapter : CategoryAdapter<Language, LanguageCardBinding>(R.layout.language_card) {
-    override fun onBindViewHolder(holder: CategoryHolder<Language, LanguageCardBinding>, position: Int) = with(holder.binding){
+    override fun onBindViewHolder(holder: CategoryHolder<LanguageCardBinding>, position: Int) = with(holder.binding){
         holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
@@ -32,14 +33,24 @@ class LanguageAdapter : CategoryAdapter<Language, LanguageCardBinding>(R.layout.
 }
 
 class TagAdapter : CategoryAdapter<Tag, TagCardBinding>(R.layout.tag_card) {
-    override fun onBindViewHolder(holder: CategoryHolder<Tag, TagCardBinding>, position: Int) = with(holder.binding){
+    override fun onBindViewHolder(holder: CategoryHolder<TagCardBinding>, position: Int) = with(holder.binding){
         holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
     }
 }
 
-abstract class  CategoryAdapter<T: BaseEntity,V: ViewDataBinding>(val layout: Int) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder<T,V>>(){
+class StationAdapter : CategoryAdapter<StationModel, StationCardBinding>(R.layout.station_card) {
+    override fun onBindViewHolder(holder: CategoryHolder<StationCardBinding>, position: Int) = with(holder.binding){
+        holder.itemView.setOnClickListener { onItemClick(position) }
+        data = getItem(position)
+        executePendingBindings()
+    }
+}
+
+
+
+abstract class  CategoryAdapter<T: Any,V: ViewDataBinding>(val layout: Int) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder<V>>(){
     private var items = listOf<T>()
     var onItemClick: (Int) -> Unit = {v -> Log.v("NOT BINDING","v = $v")}
 
@@ -50,13 +61,13 @@ abstract class  CategoryAdapter<T: BaseEntity,V: ViewDataBinding>(val layout: In
     }
     fun getItem(position: Int) = items[position]
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder<T,V> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder<V> {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<V>(inflater, layout, parent,false)
-        return CategoryHolder<T,V>(binding)
+        return CategoryHolder<V>(binding)
     }
 
     override fun getItemCount()= items.size
 
-    class CategoryHolder<T: BaseEntity,V: ViewDataBinding>(val binding: V): RecyclerView.ViewHolder(binding.root)
+    class CategoryHolder<V: ViewDataBinding>(val binding: V): RecyclerView.ViewHolder(binding.root)
 }

@@ -45,7 +45,16 @@ fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().ge
 fun CatalogDatabase.Companion.getAllCountries() = getInstance().additionalTables().getAllCountries()
 fun CatalogDatabase.Companion.getAllLanguages() = getInstance().additionalTables().getAllLanguages()
 fun CatalogDatabase.Companion.getAllTags() = getInstance().additionalTables().getAllTags()
-
+fun CatalogDatabase.Companion.getStationsWithFilter(filter: String): List<StationModel>{
+    val type = filter.substringBefore('=')
+    val value = filter.substringAfter('\'').substringBefore('\'')
+    when(type){
+        "country" -> return getInstance().stationModelDao().getStationsWithFilterCountry(value)
+        "language" -> return getInstance().stationModelDao().getStationsWithFilterLanguage("%$value%")
+        "tags" -> return getInstance().stationModelDao().getStationsWithFilterTags("%$value%")
+    }
+    return listOf()
+}
 
 fun CatalogDatabase.Companion.saveSyncResult() {
     val update = oldSize - delete

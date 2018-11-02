@@ -17,6 +17,15 @@ interface StationModelDao{
 
     @Query("DELETE FROM stations WHERE unsync=1")
     fun deleteUnsync(): Int
+
+    @Query("SELECT * FROM stations WHERE country=:filter ORDER BY votes DESC")
+    fun getStationsWithFilterCountry(filter: String): List<StationModel>
+
+    @Query("SELECT * FROM stations WHERE language LIKE :filter ORDER BY votes DESC")
+    fun getStationsWithFilterLanguage(filter: String): List<StationModel>
+
+    @Query("SELECT * FROM stations WHERE tags LIKE :filter ORDER BY votes DESC")
+    fun getStationsWithFilterTags(filter: String): List<StationModel>
 }
 
 @Dao

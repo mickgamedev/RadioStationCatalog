@@ -19,5 +19,5 @@ fun RecyclerView.recyclerManager(manager: RecyclerView.LayoutManager){
 
 @BindingAdapter("src")
 fun ImageView.loadImage(url: String){
-    Picasso.get().load(url).into(this)
+    if(!url.isEmpty()) Picasso.get().load(url).into(this)
 }
