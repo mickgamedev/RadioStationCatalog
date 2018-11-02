@@ -3,36 +3,64 @@ package ru.yandex.dunaev.mick.radiostationcatalog.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import ru.yandex.dunaev.mick.radiostationcatalog.database.CatalogDatabase
-import ru.yandex.dunaev.mick.radiostationcatalog.database.getSyncResult
-import ru.yandex.dunaev.mick.radiostationcatalog.model.SyncResult
-import ru.yandex.dunaev.mick.radiostationcatalog.model.syncDb
+import ru.yandex.dunaev.mick.radiostationcatalog.adapters.CountryAdapter
+import ru.yandex.dunaev.mick.radiostationcatalog.adapters.LanguageAdapter
+import ru.yandex.dunaev.mick.radiostationcatalog.adapters.TagAdapter
+import ru.yandex.dunaev.mick.radiostationcatalog.database.*
+import ru.yandex.dunaev.mick.radiostationcatalog.model.*
 
 val TAG = "MainViewModel"
 
 class MainViewModel: ViewModel() {
-    val countries = "Country"
-    val languages = "Language"
-    val tags = "tags"
-
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val disp = CatalogDatabase.getSyncResult().subscribe{v -> onSyncComplete(v[0])}
 
+    val countriesAdapter = CountryAdapter()
+    val languagesAdapter = LanguageAdapter()
+    val tagsAdapter = TagAdapter()
+
+    var onShowStationWithFilter: (String) -> Unit = {v -> Log.v(TAG, "show stations not binding filter:$v")}
+
+    init {
+        countriesAdapter.onItemClick = { v -> onCountryClicked(v)}
+        languagesAdapter.onItemClick = { v -> onLanguageClicked(v)}
+        tagsAdapter.onItemClick = { v -> onTagClicked(v)}
+    }
+
     fun syncNow() = syncDb()
 
     fun onSyncComplete(sync: SyncResult){
-        Log.v(TAG, "${sync.date} insert:${sync.insert} update:${sync.update} delete:${sync.delete}")
+        Log.w(TAG, "${sync.date} insert:${sync.insert} update:${sync.update} delete:${sync.delete}")
         uiScope.launch{
+            var countries: List<Country>? = null
+            var languages: List<Language>? = null
+            var tags: List<Tag>? = null
             withContext(Dispatchers.IO){
-                delay(1000L)
-                Log.v(TAG,"Hello form io")
+                countries = CatalogDatabase.getAllCountries()
+                languages = CatalogDatabase.getAllLanguages()
+                tags = CatalogDatabase.getAllTags()
             }
-            Log.v(TAG,"Hello world")
+            if(countries != null) countriesAdapter.setItems(countries!!)
+            if(languages != null) languagesAdapter.setItems(languages!!)
+            if(tags != null) tagsAdapter.setItems(tags!!)
         }
-        Log.v(TAG,"Yahoo")
+    }
 
+    fun onCountryClicked(position: Int){
+        val filter = countriesAdapter.getItem(position).value
+        onShowStationWithFilter("country='$filter'")
+    }
+
+    fun onLanguageClicked(position: Int){
+        val filter = languagesAdapter.getItem(position).value
+        onShowStationWithFilter("language='$filter'")
+    }
+
+    fun onTagClicked(position: Int){
+        val filter = tagsAdapter.getItem(position).value
+        onShowStationWithFilter("tag='$filter'")
     }
 
     override fun onCleared() {

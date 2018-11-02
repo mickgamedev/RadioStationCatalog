@@ -42,6 +42,10 @@ fun CatalogDatabase.Companion.clearAdditionalTables() = getInstance().additional
 fun CatalogDatabase.Companion.addAdditionalTables(countries: List<Country>, languages: List<Language>, tags: List<Tag>)
         = getInstance().additionalTables().addTables(countries, languages, tags)
 fun CatalogDatabase.Companion.getSyncResult() = getInstance().syncResultDao().getSyncResult().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+fun CatalogDatabase.Companion.getAllCountries() = getInstance().additionalTables().getAllCountries()
+fun CatalogDatabase.Companion.getAllLanguages() = getInstance().additionalTables().getAllLanguages()
+fun CatalogDatabase.Companion.getAllTags() = getInstance().additionalTables().getAllTags()
+
 
 fun CatalogDatabase.Companion.saveSyncResult() {
     val update = oldSize - delete

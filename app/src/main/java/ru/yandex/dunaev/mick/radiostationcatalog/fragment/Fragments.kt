@@ -1,4 +1,4 @@
-package ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment
+package ru.yandex.dunaev.mick.radiostationcatalog.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import ru.yandex.dunaev.mick.radiostationcatalog.R
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.CountriesFragmentBinding
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.LanguagesFragmentBinding
@@ -18,6 +19,7 @@ class CountriesListFragment: Fragment(){
         val binding = DataBindingUtil.inflate<CountriesFragmentBinding>(inflater, R.layout.countries_fragment,container,false)
         val model: MainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         binding.viewModel = model
+        binding.layoutManager = LinearLayoutManager(activity)
         return binding.root
     }
 }
@@ -27,6 +29,7 @@ class LanguagesListFragment: Fragment(){
         val binding = DataBindingUtil.inflate<LanguagesFragmentBinding>(inflater, R.layout.languages_fragment,container,false)
         val model: MainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         binding.viewModel = model
+        binding.layoutManager = LinearLayoutManager(activity)
         return binding.root
     }
 }
@@ -36,6 +39,7 @@ class TagsListFragment: Fragment(){
         val binding = DataBindingUtil.inflate<TagsFragmentBinding>(inflater, R.layout.tags_fragment,container,false)
         val model: MainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         binding.viewModel = model
+        binding.layoutManager = LinearLayoutManager(activity)
         return binding.root
     }
 }

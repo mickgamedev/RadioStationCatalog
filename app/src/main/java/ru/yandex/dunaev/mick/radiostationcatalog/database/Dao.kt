@@ -61,4 +61,13 @@ interface AdditionalTablesDao{
         addAllLanguages(languages)
         addAllTags(tags)
     }
+
+    @Query("SELECT * FROM countries ORDER BY stationcount DESC")
+    fun getAllCountries(): List<Country>
+
+    @Query("SELECT * FROM languages ORDER BY stationcount DESC")
+    fun getAllLanguages(): List<Language>
+
+    @Query("SELECT * FROM tags ORDER BY stationcount DESC")
+    fun getAllTags(): List<Tag>
 }

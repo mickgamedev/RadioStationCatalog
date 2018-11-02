@@ -1,5 +1,6 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -16,6 +17,7 @@ import ru.yandex.dunaev.mick.radiostationcatalog.model.Tag
 
 class CountryAdapter : CategoryAdapter<Country, CountryCardBinding>(R.layout.country_card) {
     override fun onBindViewHolder(holder: CategoryHolder<Country, CountryCardBinding>, position: Int) = with(holder.binding){
+        holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
     }
@@ -23,6 +25,7 @@ class CountryAdapter : CategoryAdapter<Country, CountryCardBinding>(R.layout.cou
 
 class LanguageAdapter : CategoryAdapter<Language, LanguageCardBinding>(R.layout.language_card) {
     override fun onBindViewHolder(holder: CategoryHolder<Language, LanguageCardBinding>, position: Int) = with(holder.binding){
+        holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
     }
@@ -30,16 +33,20 @@ class LanguageAdapter : CategoryAdapter<Language, LanguageCardBinding>(R.layout.
 
 class TagAdapter : CategoryAdapter<Tag, TagCardBinding>(R.layout.tag_card) {
     override fun onBindViewHolder(holder: CategoryHolder<Tag, TagCardBinding>, position: Int) = with(holder.binding){
+        holder.itemView.setOnClickListener { onItemClick(position) }
         data = getItem(position)
         executePendingBindings()
     }
 }
 
 abstract class  CategoryAdapter<T: BaseEntity,V: ViewDataBinding>(val layout: Int) : RecyclerView.Adapter<CategoryAdapter.CategoryHolder<T,V>>(){
-    var items = listOf<T>()
-    fun set(list: List<T>){
+    private var items = listOf<T>()
+    var onItemClick: (Int) -> Unit = {v -> Log.v("NOT BINDING","v = $v")}
+
+    fun setItems(list: List<T>){
         items = list
         notifyDataSetChanged()
+        Log.w("ADAPTER","setItems list size = ${list.size}")
     }
     fun getItem(position: Int) = items[position]
 

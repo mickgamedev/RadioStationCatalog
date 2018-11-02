@@ -1,6 +1,7 @@
 package ru.yandex.dunaev.mick.radiostationcatalog.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -8,10 +9,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import ru.yandex.dunaev.mick.radiostationcatalog.R
-import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.CountriesListFragment
-import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.LanguagesListFragment
-import ru.yandex.dunaev.mick.radiostationcatalog.activity.fragment.TagsListFragment
 import ru.yandex.dunaev.mick.radiostationcatalog.databinding.ActivityMainBinding
+import ru.yandex.dunaev.mick.radiostationcatalog.fragment.CountriesListFragment
+import ru.yandex.dunaev.mick.radiostationcatalog.fragment.LanguagesListFragment
+import ru.yandex.dunaev.mick.radiostationcatalog.fragment.TagsListFragment
 import ru.yandex.dunaev.mick.radiostationcatalog.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.pager.adapter = CatalogPagerAdapter(supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.pager)
+
+        model.onShowStationWithFilter = {v -> showStationsWithFilter(v)}
+    }
+
+    fun showStationsWithFilter(filter: String){
+        Log.v("MainActivity","show stations with filter: $filter")
     }
 }
 
